@@ -1,3 +1,5 @@
+from warpspeed.schemas.base_schema import BaseSchema
+
 from warpspeed.schemas.polymorphic_schema import PolymorphicSchema
 
 from warpspeed.schemas.rule_schema import RuleSchema
@@ -24,6 +26,8 @@ from warpspeed.schemas.pipeline_schema import PipelineSchema
 from warpspeed.schemas.workflow_schema import WorkflowSchema
 
 __all__ = [
+    "BaseSchema",
+
     "PolymorphicSchema",
 
     "RuleSchema",

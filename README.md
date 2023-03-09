@@ -348,12 +348,32 @@ Thought: I have enough information to answer the original question
 Action: {"tool": "exit", "input": "0.14"}{{ stop_sequence }}
 ```
 
-To use the tool:
+Finally, if you want to use `to_json` and `from_json` serialization/deserialization methods, you'll have to add a [Marshmallow](https://marshmallow.readthedocs.io/en/stable/) schema to your tool:
+
+```python
+from marshmallow import post_load
+from warpspeed.schemas import BaseSchema
+
+
+class RandomGenToolSchema(BaseSchema):
+    @post_load
+    def make_obj(self, data, **kwargs):
+        from random_gen.random_gen_tool import RandomGenTool
+
+        return RandomGenTool(**data)
+
+```
+
+The schema class has to be in the following format: `<ToolClassName>Schema`. You also have to specify the schema namespace during tool initialization.
+
+Here is how to use our shiny new tool:
 
 ```python
 ToolStep(
     "generate a random number and round it to 3 decimal places",
-    tool=RandomGenTool()
+    tool=RandomGenTool(
+        schema_namespace="random_gen.random_gen_tool_schema"
+    )
 )
 ```
 
