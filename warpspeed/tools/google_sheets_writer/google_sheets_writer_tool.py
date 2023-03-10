@@ -4,7 +4,7 @@ from attrs import define, field
 from warpspeed.tools import Tool
 
 
-@define(frozen=True)
+@define
 class GoogleSheetsWriterTool(Tool):
     auth_key_path: str = field(kw_only=True)
     spreadsheet_key: str = field(kw_only=True)

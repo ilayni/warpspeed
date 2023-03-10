@@ -3,7 +3,7 @@ from warpspeed.tools import Tool
 from sqlalchemy import create_engine, text
 
 
-@define(frozen=True)
+@define
 class SqlClientTool(Tool):
     engine_url: str = field(kw_only=True)
     engine_hint: str = field(kw_only=True)

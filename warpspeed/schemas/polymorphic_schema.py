@@ -10,8 +10,18 @@ class PolymorphicSchema(BaseSchema):
     PolymorphicSchema is based on https://github.com/marshmallow-code/marshmallow-oneofschema
     """
 
-    def get_schema(self, class_name: str, schema_namespace: Optional[str] = None):
-        namespace = 'warpspeed.schemas' if schema_namespace is None else schema_namespace
+    def get_schema(self, class_name: str, obj: Optional[object], schema_namespace: Optional[str]):
+        if schema_namespace:
+            namespace = schema_namespace
+        elif obj is not None and hasattr(obj, "schema_namespace"):
+            if locate(f"warpspeed.schemas.{class_name}Schema"):
+                namespace = "warpspeed.schemas"
+            elif obj.schema_namespace is None:
+                namespace = obj.schema_namespace = f"{obj.__module__}_schema"
+            else:
+                namespace = obj.schema_namespace
+        else:
+            namespace = "warpspeed.schemas"
 
         klass = locate(f"{namespace}.{class_name}Schema")
 
@@ -70,15 +80,7 @@ class PolymorphicSchema(BaseSchema):
                 {"_schema": "Unknown object class: %s" % obj.__class__.__name__},
             )
 
-        if hasattr(obj, "schema_namespace"):
-            if obj.schema_namespace is None:
-                schema_namespace = obj.schema_namespace = f"{obj.__module__}_schema"
-            else:
-                schema_namespace = obj.schema_namespace
-        else:
-            schema_namespace = None
-
-        type_schema = self.get_schema(obj_type, schema_namespace)
+        type_schema = self.get_schema(obj_type, obj, None)
 
         if not type_schema:
             return None, {"_schema": "Unsupported object type: %s" % obj_type}
@@ -88,8 +90,10 @@ class PolymorphicSchema(BaseSchema):
         schema.context.update(getattr(self, "context", {}))
 
         result = schema.dump(obj, many=False, **kwargs)
+
         if result is not None:
             result[self.type_field] = obj_type
+
         return result
 
     def load(self, data, *, many=None, partial=None, unknown=None, **kwargs):
@@ -142,7 +146,7 @@ class PolymorphicSchema(BaseSchema):
         schema_namespace = data.get("schema_namespace")
 
         try:
-            type_schema = self.get_schema(data_type, schema_namespace)
+            type_schema = self.get_schema(data_type, None, schema_namespace)
         except TypeError:
             # data_type could be unhashable
             raise ValidationError({self.type_field: ["Invalid value: %s" % data_type]})
