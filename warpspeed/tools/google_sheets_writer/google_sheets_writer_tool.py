@@ -17,8 +17,6 @@ class GoogleSheetsWriterTool(Tool):
             return self.execute_action(action, args)
         except Exception as e:
             return f"error interacting with sheet: {e}"
-        finally:
-            pass
 
     def execute_action(self, action: str, args: dict[str]) -> str:
         gc = gspread.service_account(filename=self.auth_key_path)

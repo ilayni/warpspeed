@@ -28,6 +28,7 @@ setup(
         "llama_index",
         "wikipedia",
         "tiktoken",
-        "gspread"
+        "gspread",
+        "sqlalchemy>1"
     ]
 )

@@ -20,6 +20,7 @@ from warpspeed.schemas.email_tool_schema import EmailToolSchema
 from warpspeed.schemas.wiki_tool_schema import WikiToolSchema
 from warpspeed.schemas.google_sheets_reader_tool_schema import GoogleSheetsReaderToolSchema
 from warpspeed.schemas.google_sheets_writer_tool_schema import GoogleSheetsWriterToolSchema
+from warpspeed.schemas.sql_client_tool_schema import SqlClientToolSchema
 
 from warpspeed.schemas.structure_schema import StructureSchema
 from warpspeed.schemas.pipeline_schema import PipelineSchema
@@ -41,6 +42,9 @@ __all__ = [
     "DataScientistToolSchema",
     "EmailToolSchema",
     "WikiToolSchema",
+    "GoogleSheetsReaderToolSchema",
+    "GoogleSheetsWriterToolSchema",
+    "SqlClientToolSchema",
 
     "StepSchema",
     "PromptStepSchema",
