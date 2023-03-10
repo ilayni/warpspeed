@@ -364,7 +364,7 @@ class RandomGenToolSchema(BaseSchema):
 
 ```
 
-The schema class has to be in the following format: `<ToolClassName>Schema`. You also have to specify the schema namespace during tool initialization.
+The schema class has to be in the following format: `<ToolClassName>Schema` and be located in `<tool_class_name>_schema.py`.
 
 Before using the tool, make sure to create an `__init__.py` file in the tool directory with the following contents:
 
@@ -388,10 +388,17 @@ from random_gen.random_gen_tool import RandomGenTool
 
 ToolStep(
     "generate a random number and round it to 3 decimal places",
-    tool=RandomGenTool(
-        schema_namespace="random_gen.random_gen_tool_schema"
-    )
+    tool=RandomGenTool()
 )
+```
+
+If you are deserializing a workflow or a pipeline from JSON, make sure to specify deserialization schema namespace:
+
+```json
+{
+  "schema_namespace": "random_gen.random_gen_tool_schema",
+  "type": "RandomGenTool"
+}
 ```
 
 Check out other [Warpspeed tools](https://github.com/usewarpspeed/warpspeed/tree/main/warpspeed/tools) to learn more about tools' implementation details. 

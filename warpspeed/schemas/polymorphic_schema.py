@@ -71,7 +71,10 @@ class PolymorphicSchema(BaseSchema):
             )
 
         if hasattr(obj, "schema_namespace"):
-            schema_namespace = obj.schema_namespace
+            if obj.schema_namespace is None:
+                schema_namespace = obj.schema_namespace = f"{obj.__module__}_schema"
+            else:
+                schema_namespace = obj.schema_namespace
         else:
             schema_namespace = None
 
